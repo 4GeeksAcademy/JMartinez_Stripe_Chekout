@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "bootswatch/dist/lux/bootstrap.min.css";
 import "./App.css";
 
@@ -12,13 +12,13 @@ import {
 
 import axios from "axios";
 
-const stripePromise = loadStripe("<your public key here>");
+const stripePromise = loadStripe("pk_test_51Nsr4fKXj5LWRngyICcySMhyijuGZpNBAj1mAEgpVe96QSXP0c3wT3W2kA7T1nzikklh0UqthqmLvYqh7JY9Si4O00Bkpvecrd");
 
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,36 +27,33 @@ const CheckoutForm = () => {
       type: "card",
       card: elements.getElement(CardElement),
     });
-    setLoading(true);
+    // setLoading(true);
 
     if (!error) {
-      // console.log(paymentMethod)
+    
+      console.log(paymentMethod)
       const { id } = paymentMethod;
-      try {
+    
         const { data } = await axios.post(
-          "http://localhost:3001/api/checkout",
+          'https://redesigned-giggle-jv7577j5x9g25669-3001.app.github.dev/api/checkout',
           {
             id,
-            amount: 10000, //cents
+            amount: 20000, //cents
           }
         );
         console.log(data);
 
-        elements.getElement(CardElement).clear();
-      } catch (error) {
-        console.log(error);
-      }
-      setLoading(false);
-    }
+       
+      } 
+  
   };
 
-  console.log(!stripe || loading);
 
   return (
     <form className="card card-body" onSubmit={handleSubmit}>
       {/* Product Information */}
       <img
-        src="https://www.corsair.com/medias/sys_master/images/images/h80/hdd/9029904465950/-CH-9109011-ES-Gallery-K70-RGB-MK2-01.png"
+        src="https://th.bing.com/th/id/R.634be73d9a683c71114c8e23cd4fc6bf?rik=vJA537XKFoDgeA&pid=ImgRaw&r=0"
         alt="Corsair Gaming Keyboard RGB"
         className="img-fluid"
       />
@@ -69,13 +66,14 @@ const CheckoutForm = () => {
       </div>
 
       <button disabled={!stripe} className="btn btn-success">
-        {loading ? (
+        buy
+        {/* {loading ? (
           <div className="spinner-border text-light" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         ) : (
           "Buy"
-        )}
+        )} */}
       </button>
     </form>
   );
